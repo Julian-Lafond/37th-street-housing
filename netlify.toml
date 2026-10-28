@@ -1,0 +1,8 @@
+# Netlify build settings. Next.js is detected automatically (OpenNext adapter);
+# environment variables are set in the Netlify dashboard, never here.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
