@@ -1,0 +1,450 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Contrast checked (WCAG 2.2 AA):
+ *   ink on plaster 14.9   · ink-soft on plaster 7.4 · ink-soft on sand 6.6
+ *   terracotta on plaster 5.2 · on sand 4.6 · plaster on terracotta 5.2
+ *   eucalyptus-ink on plaster 5.9 (use for small text; eucalyptus 4.0 is icons/graphics only)
+ *   plaster on dusk 11.9 · mist on dusk 8.4 · sunset on dusk 4.5 · sunset on ink 5.7
+ *   jacaranda is decorative only (3.1 on plaster), never text.
+ */
+@theme {
+  --color-plaster: #f7f2ea;
+  --color-sand: #ede4d6;
+  --color-sand-deep: #e2d6c3;
+  --color-ink: #1b1f1d;
+  --color-ink-soft: #4a504c;
+  --color-dusk: #22304a;
+  --color-dusk-deep: #1a2539;
+  --color-mist: #c9ced8;
+  --color-terracotta: #b23e1f;
+  --color-terracotta-deep: #93321a;
+  --color-sunset: #f2704e;
+  --color-peach: #f7b79a;
+  --color-eucalyptus: #5e7f6e;
+  --color-eucalyptus-ink: #476353;
+  --color-jacaranda: #8b7fd1;
+
+  /* Home hero: ~48px on phones → ~113px at 1440 → 136px max. */
+  --text-mega: clamp(3rem, 0.9rem + 6.9vw, 8.5rem);
+  --text-mega--line-height: 0.95;
+  --text-mega--letter-spacing: -0.035em;
+  /* Page titles: ~44px → ~94px at 1440. */
+  --text-hero: clamp(2.75rem, 1.4rem + 5vw, 6.5rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.03em;
+  --text-display: clamp(2.25rem, 1.45rem + 3.2vw, 4.5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.025em;
+  --text-title: clamp(1.75rem, 1.35rem + 1.6vw, 2.75rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.015em;
+  --text-unit: clamp(3.25rem, 2.4rem + 3.6vw, 5.75rem);
+  --text-unit--line-height: 0.92;
+  --text-unit--letter-spacing: -0.03em;
+  --text-lede: clamp(1.1875rem, 1.05rem + 0.55vw, 1.4375rem);
+  --text-lede--line-height: 1.5;
+  --text-body: clamp(1.0625rem, 1.03rem + 0.15vw, 1.125rem);
+  --text-body--line-height: 1.65;
+
+  /* Motion tokens (mirrored in src/lib/motion.ts). Custom curves only. */
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-transition: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: var(--ease-entrance);
+  /* Plain `transition-*` utilities use the tokens too (never the stock ease). */
+  --default-transition-timing-function: var(--ease-transition);
+  --default-transition-duration: 200ms;
+  --container-content: 80rem;
+}
+
+:root {
+  --dur-micro: 200ms; /* hovers, presses */
+  --dur-ui: 400ms; /* menus, toggles, state changes */
+  --dur-reveal: 900ms; /* section and headline reveals */
+  --stagger: 60ms;
+  /* Spacing scale: sections breathe more as the viewport grows. */
+  --space-section: clamp(5rem, 3.25rem + 5.5vw, 10rem);
+  --space-block: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem);
+  /* The headline waits for the branded intro on the first page of a session. */
+  --intro-delay: 0.1s;
+}
+html[data-intro="play"] {
+  --intro-delay: 1.15s;
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display-italic: var(--font-fraunces-italic), ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Keep focused elements clear of the sticky mobile Inquire bar (WCAG 2.4.11). */
+  @media (max-width: 767px) {
+    html {
+      scroll-padding-bottom: 6rem;
+    }
+  }
+
+  body {
+    background-color: var(--color-plaster);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(h1, h2, h3) {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-peach);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-sunset);
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility section-y {
+  padding-block: var(--space-section);
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Architectural hairline. */
+  .rule {
+    border-color: color-mix(in oklab, var(--color-ink) 14%, transparent);
+  }
+
+  /* Golden-hour wash: sunset → peach → jacaranda, low opacity over plaster.
+     Used in three places only: hero edge, CTA band, 404. */
+  .bg-golden {
+    background-color: var(--color-plaster);
+    background-image: linear-gradient(
+      115deg,
+      color-mix(in oklab, var(--color-sunset) 55%, transparent) 0%,
+      color-mix(in oklab, var(--color-peach) 55%, transparent) 45%,
+      color-mix(in oklab, var(--color-jacaranda) 45%, transparent) 100%
+    );
+  }
+
+  /* Underline draws in from the left on hover and exits to the right.
+     A faint resting line keeps links recognizable without color. */
+  .link-underline {
+    text-decoration: none;
+    background-image:
+      linear-gradient(currentColor, currentColor),
+      linear-gradient(color-mix(in oklab, currentColor 28%, transparent), color-mix(in oklab, currentColor 28%, transparent));
+    background-size: 0% 1px, 100% 1px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 0.12em;
+    transition: background-size var(--dur-ui) var(--ease-transition);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible,
+  :hover > .link-underline,
+  :focus-visible > .link-underline {
+    background-size: 100% 1px, 100% 1px;
+    background-position: 0 100%, 0 100%;
+  }
+
+  .hero-zoom {
+    animation: hero-zoom 2.4s var(--ease-entrance) var(--intro-delay) both;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Legal page prose (MDX). */
+  .prose-legal {
+    max-width: 68ch;
+  }
+  .prose-legal h2 {
+    font-size: var(--text-title);
+    line-height: var(--text-title--line-height);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+  .prose-legal h3 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-variation-settings: normal;
+  }
+  .prose-legal p,
+  .prose-legal ul,
+  .prose-legal ol {
+    margin-bottom: 1.1rem;
+    color: var(--color-ink-soft);
+  }
+  .prose-legal ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-legal ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+  .prose-legal li {
+    margin-bottom: 0.4rem;
+  }
+  .prose-legal a {
+    color: var(--color-terracotta);
+    text-decoration: underline;
+  }
+  .prose-legal strong {
+    color: var(--color-ink);
+  }
+}
+
+/* ── Masked headline reveal (SplitHeadline) ──────────────────────────────
+   Each word rises from behind its own mask, in reading order. The mask
+   extends above/sideways so ascenders and italic overhangs aren't cut. */
+.mask-word {
+  display: inline-block;
+  vertical-align: top;
+  clip-path: inset(-0.4em -0.3em -0.14em -0.3em);
+}
+.mask-word-inner {
+  display: inline-block;
+  animation: mask-rise 650ms var(--ease-entrance) both;
+  animation-delay: calc(var(--intro-delay) + var(--headline-delay, 0s) + var(--i, 0) * 30ms);
+}
+/* SplitText line masks (scroll reveals): room for descenders and italic overhangs. */
+.split-line-mask {
+  padding: 0.08em 0.2em 0.16em;
+  margin: -0.08em -0.2em -0.16em;
+}
+/* Supporting copy that follows the headline in a stagger. */
+.load-rise {
+  animation: load-rise 550ms var(--ease-entrance) both;
+  animation-delay: calc(var(--intro-delay) + 0.2s + var(--d, 0) * var(--stagger));
+}
+
+/* ── Branded intro (first page of a session only) ───────────────────── */
+.intro {
+  display: none;
+}
+html[data-intro="play"] .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none; /* never blocks clicks or keyboard use */
+}
+.intro-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-dusk);
+  animation: intro-exit 600ms var(--ease-transition) 0.7s forwards;
+}
+.intro-sun {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: intro-sun 700ms var(--ease-entrance) both;
+}
+.intro-horizon {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: intro-line 500ms var(--ease-transition) 0.1s both;
+}
+.intro-horizon-2 {
+  animation-delay: 0.2s;
+}
+.intro-word {
+  animation: mask-rise 700ms var(--ease-entrance) 0.15s both;
+}
+
+/* ── Mobile menu: links rise in one after another ───────────────────── */
+dialog[open] .menu-stagger > * {
+  animation: load-rise 600ms var(--ease-entrance) both;
+  animation-delay: calc(120ms + var(--d, 0) * var(--stagger));
+}
+
+/* ── Lenis smooth scroll ────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+[data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ── Reduced motion: no movement, simple fades only ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mask-word-inner,
+  .load-rise,
+  .intro-word,
+  dialog[open] .menu-stagger > * {
+    animation-name: fade-in !important;
+    animation-duration: 500ms !important;
+  }
+}
+
+/* Lock page scroll behind open modal dialogs (menu, lightbox). */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+@keyframes mask-rise {
+  from {
+    transform: translateY(120%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes load-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-sun {
+  from {
+    transform: translateY(70%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-exit {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
