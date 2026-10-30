@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { GOLDEN, OG_EXTERIOR, OG_FONTS, OG_SIZE } from "@/lib/og";
+import { DEFAULT_SHARE_IMAGE } from "@/lib/seo";
 
-export const alt = "37th Street Housing: furnished 3–5 bedroom apartments near USC";
+export const alt = DEFAULT_SHARE_IMAGE.alt;
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

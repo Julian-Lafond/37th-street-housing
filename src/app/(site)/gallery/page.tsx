@@ -7,14 +7,14 @@ import { UnitName } from "@/components/ui/unit-name";
 import { ButtonLink } from "@/components/ui/button";
 import { getMedia, getUnits } from "@/lib/data";
 import { selectForUnit, selectShared } from "@/lib/data/media-selectors";
-import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Photo Gallery: Inside the Building",
+export const metadata: Metadata = pageMetadata({
+  title: "Photos: Furnished Apartments Near USC",
   description:
-    "Photos of 37th Street Housing near USC: the building on West 37th Street, furnished bedrooms, private bathrooms and shared kitchens.",
-  alternates: { canonical: "/gallery" },
-};
+    "See inside 37th Street Housing near USC: furnished bedrooms, private bathrooms, kitchens and the building itself. Like it? Send an inquiry.",
+  path: "/gallery",
+});
 
 export default async function GalleryPage() {
   const [media, units] = await Promise.all([getMedia(), getUnits()]);
@@ -35,7 +35,8 @@ export default async function GalleryPage() {
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Gallery", path: "/gallery" }])} />
       <PageHeader
-        eyebrow="Gallery"
+        eyebrow="Photos · Furnished apartments near USC"
+        eyebrowInHeading
         title="Inside 37th Street"
         body="The building on West 37th Street, and a look at the furnished bedrooms, private bathrooms and kitchens inside."
       >

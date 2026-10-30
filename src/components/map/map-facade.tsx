@@ -22,6 +22,10 @@ export function MapFacade({
 }) {
   const [loaded, setLoaded] = useState(false);
   const dark = tone === "dark";
+  // Google Maps directions to the same place the map link searches for.
+  const place = new URL(mapsUrl).searchParams.get("query");
+  const directionsUrl = place ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place)}` : null;
+  const linkClassName = `inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold ${dark ? "text-plaster" : "text-terracotta"}`;
 
   return (
     <div className={className}>
@@ -53,16 +57,20 @@ export function MapFacade({
           </div>
         )}
       </div>
-      <a
-        href={mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold ${dark ? "text-plaster" : "text-terracotta"}`}
-      >
-        <span className="link-underline">Open in Google Maps</span>
-        <span className="sr-only"> (opens in a new tab)</span>
-        <span aria-hidden="true">↗</span>
-      </a>
+      <div className="mt-3 flex flex-wrap gap-x-6">
+        {directionsUrl && (
+          <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className={linkClassName}>
+            <span className="link-underline">Get directions</span>
+            <span className="sr-only"> (opens Google Maps in a new tab)</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        )}
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className={linkClassName}>
+          <span className="link-underline">Open in Google Maps</span>
+          <span className="sr-only"> (opens in a new tab)</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
     </div>
   );
 }

@@ -28,7 +28,10 @@ export async function SiteChrome({ children }: { children: ReactNode }) {
       <SiteFooter />
       {/* Room for the sticky mobile Inquire bar so it never covers the footer. */}
       <div aria-hidden="true" className="h-[4.75rem] bg-dusk md:hidden" />
-      <MobileInquireBar leasingText={site.leasingBanner.enabled ? site.leasingBanner.text : "37th Street Housing"} />
+      <MobileInquireBar
+        leasingText={site.leasingBanner.enabled ? site.leasingBanner.text : "37th Street Housing"}
+        phone={site.phone}
+      />
       <SmoothScroll />
       <MotionDirector />
     </>

@@ -6,14 +6,14 @@ import { PageHeader } from "@/components/ui/page-header";
 import { getSiteSettings, getUnits } from "@/lib/data";
 import { isServiceConfigured } from "@/lib/supabase/service";
 import { advertisedMonthlyPrice, formatCurrency } from "@/lib/pricing";
-import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact & Inquire",
+export const metadata: Metadata = pageMetadata({
+  title: "Inquire About Apartments Near USC",
   description:
-    "Ask about a furnished 3, 4 or 5-bedroom apartment at 37th Street Housing near USC. Leasing for August 2027.",
-  alternates: { canonical: "/contact" },
-};
+    "Ask about a furnished 3, 4 or 5-bedroom apartment near USC in University Park, Los Angeles. Send an inquiry and we’ll follow up with availability.",
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const [site, units] = await Promise.all([getSiteSettings(), getUnits()]);

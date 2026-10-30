@@ -14,7 +14,7 @@ import { StatusPill } from "@/components/ui/status-pill";
 import { UnitName } from "@/components/ui/unit-name";
 import { getSiteSettings, getUnit, getUnitCover, getUnitMedia, getUnitSlugs, getUnits } from "@/lib/data";
 import { PRICE_DISCLAIMER, formatAvailability, formatCurrency } from "@/lib/pricing";
-import { JsonLd, absoluteUrl, breadcrumbJsonLd, postalAddressJsonLd, unitOfferJsonLd } from "@/lib/seo";
+import { COMPLEX_ID, JsonLd, absoluteUrl, breadcrumbJsonLd, pageMetadata, postalAddressJsonLd, unitOfferJsonLd, unitSeo } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return (await getUnitSlugs()).map((slug) => ({ slug }));
@@ -24,12 +24,7 @@ export async function generateMetadata({ params }: PageProps<"/residences/[slug]
   const { slug } = await params;
   const unit = await getUnit(slug);
   if (!unit) return {};
-  return {
-    title: unit.seo.title,
-    description: unit.seo.description,
-    alternates: { canonical: `/residences/${unit.slug}` },
-    openGraph: { title: `${unit.seo.title} | 37th Street Housing`, description: unit.seo.description, url: `/residences/${unit.slug}` },
-  };
+  return pageMetadata({ ...unitSeo(unit), path: `/residences/${unit.slug}`, ownShareImage: true });
 }
 
 export default async function UnitPage({ params }: PageProps<"/residences/[slug]">) {
@@ -50,6 +45,7 @@ export default async function UnitPage({ params }: PageProps<"/residences/[slug]
   const apartmentJsonLd = {
     "@context": "https://schema.org",
     "@type": "Apartment",
+    "@id": `${absoluteUrl(`/residences/${unit.slug}`)}#apartment`,
     name: `${unit.displayName}, 37th Street Housing`,
     description: unit.description,
     url: absoluteUrl(`/residences/${unit.slug}`),
@@ -63,7 +59,7 @@ export default async function UnitPage({ params }: PageProps<"/residences/[slug]
       { "@type": "LocationFeatureSpecification", name: "Private bathroom for every bedroom", value: true },
     ].filter(Boolean),
     address: postalAddressJsonLd(site),
-    containedInPlace: { "@type": "ApartmentComplex", name: site.legalName, url: absoluteUrl("/") },
+    containedInPlace: { "@type": "ApartmentComplex", "@id": COMPLEX_ID, name: site.legalName, url: absoluteUrl("/") },
     ...(cover && { image: absoluteUrl(cover.src) }),
     offers: unitOfferJsonLd(unit),
   };
@@ -104,10 +100,12 @@ export default async function UnitPage({ params }: PageProps<"/residences/[slug]
       {/* Hero band */}
       <section aria-labelledby="unit-heading" className="container-site grid gap-10 pb-16 pt-10 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-24">
         <div className="lg:col-span-6">
-          <p className="eyebrow text-terracotta">
-            Residence · {unit.bedrooms} Bed · {unit.bathrooms} Bath
-          </p>
-          <h1 id="unit-heading" className="mt-4 text-[clamp(4rem,2.6rem+6vw,8.5rem)] leading-[0.92] tracking-[-0.04em]">
+          {/* The eyebrow sits inside the H1 so the main heading carries the search phrase. */}
+          <h1 id="unit-heading" className="text-[clamp(4rem,2.6rem+6vw,8.5rem)] leading-[0.92] tracking-[-0.04em]">
+            <span className="eyebrow mb-4 block text-terracotta">
+              {unit.furnished ? "Furnished apartment" : "Apartment"} near USC · {unit.bedrooms} Bed · {unit.bathrooms} Bath
+              <span className="sr-only">:</span>
+            </span>
             <span className="mask-word">
               <span className="mask-word-inner">
                 <UnitName unit={unit} />

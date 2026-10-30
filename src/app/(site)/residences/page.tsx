@@ -4,15 +4,22 @@ import { FilterableItem, ResidenceFilter } from "@/components/units/residence-fi
 import { UnitCard } from "@/components/units/unit-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { getUnitCover, getUnits } from "@/lib/data";
-import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
-import { PRICE_DISCLAIMER } from "@/lib/pricing";
+import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
+import { PRICE_DISCLAIMER, advertisedMonthlyPrice, formatCurrency } from "@/lib/pricing";
 
-export const metadata: Metadata = {
-  title: "3, 4 & 5-Bedroom Furnished Apartments Near USC",
-  description:
-    "Compare all five furnished apartments at 37th Street Housing near USC: 3, 4 and 5 bedrooms, a private bath for every bedroom, in-unit laundry, from $5,100/month. Available August 2027.",
-  alternates: { canonical: "/residences" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const units = await getUnits();
+  const prices = units.map(advertisedMonthlyPrice).filter((p): p is number => p !== null);
+  const beds = units.map((u) => u.bedrooms);
+  const range = `${Math.min(...beds)}–${Math.max(...beds)}`;
+  return pageMetadata({
+    title: `${range} Bedroom Apartments Near USC`,
+    description: `Compare ${units.length} furnished ${range} bedroom apartments near USC${
+      prices.length ? `, from ${formatCurrency(Math.min(...prices))}/month` : ""
+    }, each bedroom with a private bath. Inquire about August 2027 leases.`,
+    path: "/residences",
+  });
+}
 
 export default async function ResidencesPage() {
   const units = await getUnits();
@@ -24,7 +31,8 @@ export default async function ResidencesPage() {
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Residences", path: "/residences" }])} />
       <PageHeader
-        eyebrow="Residences · August 2027"
+        eyebrow="3–5 bedroom apartments near USC · August 2027"
+        eyebrowInHeading
         title="Five apartments, three to five bedrooms."
         body="Every apartment is fully furnished, has a washer and dryer in the unit, and gives each bedroom its own private bathroom. Rent is for the whole apartment per month on a 12-month lease."
       />

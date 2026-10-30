@@ -41,11 +41,8 @@ export const units: Unit[] = [
       "12-month lease",
       "Available August 2027",
     ],
-    seo: {
-      title: "Furnished 5-Bedroom Apartment Near USC | Apt 1158",
-      description:
-        "Apt 1158 at 37th Street Housing: 5 bedrooms with 5 private baths, 1,720 sq ft, fully furnished with in-unit laundry, about a 5-minute walk to USC. $8,750/month, available August 2027.",
-    },
+    // Blank: built from the details above (see unitSeo in src/lib/seo.tsx).
+    seo: { title: "", description: "" },
   },
   {
     ...shared,
@@ -71,11 +68,8 @@ export const units: Unit[] = [
       "12-month lease",
       "Available August 2027",
     ],
-    seo: {
-      title: "Furnished 3-Bedroom Apartment Near USC | Apt 1158 ¼",
-      description:
-        "Apt 1158 ¼ at 37th Street Housing: 3 bedrooms with 3 private baths, 1,042 sq ft, fully furnished with in-unit laundry, steps from USC. $5,100/month, available August 2027.",
-    },
+    // Blank: built from the details above (see unitSeo in src/lib/seo.tsx).
+    seo: { title: "", description: "" },
   },
   {
     ...shared,
@@ -101,11 +95,8 @@ export const units: Unit[] = [
       "12-month lease",
       "Available August 2027",
     ],
-    seo: {
-      title: "Furnished 3-Bedroom Apartment Near USC | Apt 1158 ½",
-      description:
-        "Apt 1158 ½ at 37th Street Housing: 3 bedrooms with 3 private baths, 1,045 sq ft, furnished with in-unit washer and dryer, near USC. $5,100/month, available August 2027.",
-    },
+    // Blank: built from the details above (see unitSeo in src/lib/seo.tsx).
+    seo: { title: "", description: "" },
   },
   {
     ...shared,
@@ -131,11 +122,8 @@ export const units: Unit[] = [
       "12-month lease",
       "Available August 2027",
     ],
-    seo: {
-      title: "Furnished 4-Bedroom Apartment Near USC | Apt 1158 ¾",
-      description:
-        "Apt 1158 ¾ at 37th Street Housing: 4 bedrooms with 4 private baths, 1,411 sq ft, fully furnished with in-unit laundry, about 5 minutes from USC. $6,800/month, available August 2027.",
-    },
+    // Blank: built from the details above (see unitSeo in src/lib/seo.tsx).
+    seo: { title: "", description: "" },
   },
   {
     ...shared,
@@ -161,10 +149,7 @@ export const units: Unit[] = [
       "12-month lease",
       "Available August 2027",
     ],
-    seo: {
-      title: "Furnished 5-Bedroom Apartment Near USC | Apt 1160",
-      description:
-        "Apt 1160 at 37th Street Housing: 5 bedrooms with 5 private baths, 1,809 sq ft, fully furnished with in-unit laundry, about a 5-minute walk to USC. $8,875/month, available August 2027.",
-    },
+    // Blank: built from the details above (see unitSeo in src/lib/seo.tsx).
+    seo: { title: "", description: "" },
   },
 ];

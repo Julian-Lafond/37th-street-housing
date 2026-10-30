@@ -55,12 +55,12 @@ export function Hero({ hero, media, site }: { hero: HomePageContent["hero"]; med
 
           {/* Headline: over the photo on phones, full width on desktop */}
           <div className="absolute inset-x-0 bottom-0 px-4 pb-8 text-plaster sm:px-6 lg:static lg:col-span-12 lg:row-start-1 lg:p-0 lg:text-ink">
-            <p className="eyebrow load-rise text-plaster lg:text-terracotta" style={{ "--d": -4 } as CSSProperties}>
-              {hero.eyebrow}
-            </p>
             <SplitHeadline
               id="hero-heading"
-              className="mt-5 max-w-[16ch] text-mega lg:max-w-none"
+              kicker={hero.eyebrow}
+              kickerClassName="eyebrow load-rise mb-5 text-plaster lg:text-terracotta"
+              kickerStyle={{ "--d": -4 } as CSSProperties}
+              className="max-w-[16ch] text-mega lg:max-w-none"
               accentClassName="text-peach lg:text-terracotta"
               segments={[{ text: hero.headline }, { text: hero.headlineAccent, accent: true, block: true }]}
             />

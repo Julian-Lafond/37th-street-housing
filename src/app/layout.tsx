@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { INTRO_SCRIPT } from "@/components/motion/intro";
-import { SITE_URL } from "@/lib/seo";
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,11 +29,10 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Furnished Apartments Near USC | 37th Street Housing",
+    default: HOME_TITLE,
     template: "%s | 37th Street Housing",
   },
-  description:
-    "Five furnished 3–5 bedroom apartments on West 37th Street in University Park, about a 5-minute walk to USC. A private bathroom for every bedroom, in-unit washer and dryer, 12-month leases from August 2027.",
+  description: HOME_DESCRIPTION,
   applicationName: "37th Street Housing",
   openGraph: {
     type: "website",

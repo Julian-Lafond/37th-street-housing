@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export interface HeadlineSegment {
   text: string;
@@ -13,6 +13,10 @@ export interface HeadlineSegment {
  * the headline builds line by line. Pure CSS (see .mask-word in globals.css):
  * it starts at first paint, never waits for JavaScript, and follows the branded
  * intro via --intro-delay. Screen readers get the plain sentence once.
+ *
+ * `kicker` is the small label line above the headline (e.g. "Furnished
+ * apartments near USC"). It renders inside the heading so search engines read
+ * it as part of the page's main heading, with no change to how it looks.
  */
 export function SplitHeadline({
   segments,
@@ -21,7 +25,13 @@ export function SplitHeadline({
   className = "",
   accentClassName = "",
   delay = 0,
+  kicker,
+  kickerClassName = "",
+  kickerStyle,
 }: {
+  kicker?: ReactNode;
+  kickerClassName?: string;
+  kickerStyle?: CSSProperties;
   segments: HeadlineSegment[];
   as?: "h1" | "h2";
   id?: string;
@@ -35,6 +45,12 @@ export function SplitHeadline({
 
   return (
     <Heading id={id} className={className} style={{ "--headline-delay": `${delay}s` } as CSSProperties}>
+      {kicker && (
+        <span className={`block ${kickerClassName}`} style={kickerStyle}>
+          {kicker}
+          <span className="sr-only">:</span>
+        </span>
+      )}
       <span className="sr-only">{full}</span>
       <span aria-hidden="true">
         {segments.map((segment, s) => {

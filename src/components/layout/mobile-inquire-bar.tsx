@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Phone } from "lucide-react";
 import { buttonClasses } from "@/components/ui/button";
 
 /**
  * Sticky bottom bar on small screens so "Inquire" is always one tap away.
  * The button sits on the left and the text stops short of the bottom-right
- * corner, where the host's badge is drawn.
+ * corner, where the host's badge is drawn. A tap-to-call button joins it once
+ * a phone number is set in /admin → Contact & settings.
  */
-export function MobileInquireBar({ leasingText }: { leasingText: string }) {
+export function MobileInquireBar({ leasingText, phone }: { leasingText: string; phone: string | null }) {
   const pathname = usePathname();
   if (pathname === "/contact") return null;
 
@@ -19,6 +21,15 @@ export function MobileInquireBar({ leasingText }: { leasingText: string }) {
         <Link href="/contact" className={buttonClasses("primary", "md", "shrink-0")}>
           Inquire
         </Link>
+        {phone && (
+          <a
+            href={`tel:${phone.replace(/[^\d+]/g, "")}`}
+            className={buttonClasses("secondary", "md", "shrink-0 px-0 w-11")}
+          >
+            <Phone aria-hidden="true" className="size-4" />
+            <span className="sr-only">Call {phone}</span>
+          </a>
+        )}
         <p className="line-clamp-2 min-w-0 flex-1 pr-(--badge-clearance) text-sm font-semibold leading-tight text-ink max-[359px]:hidden">
           {leasingText}
         </p>

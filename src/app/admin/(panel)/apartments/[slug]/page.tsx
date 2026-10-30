@@ -95,8 +95,19 @@ export default async function EditApartmentPage({ params }: PageProps<"/admin/ap
 
         <Card title="Search engines">
           <div className="space-y-5">
-            <Field label="Page title" name="seo_title" defaultValue={u.seo_title} required hint="Shown in Google results. About 60 characters." />
-            <TextArea label="Page description" name="seo_description" defaultValue={u.seo_description} rows={3} required hint="About 155 characters." />
+            <Field
+              label="Page title"
+              name="seo_title"
+              defaultValue={u.seo_title}
+              hint="Shown in Google results, followed by “| 37th Street Housing”. Leave blank (recommended) to build it from this apartment’s details. If you write one, keep it under about 38 characters."
+            />
+            <TextArea
+              label="Page description"
+              name="seo_description"
+              defaultValue={u.seo_description}
+              rows={3}
+              hint="Leave blank (recommended) so the price and availability in Google always match this page. If you write one, keep it under 155 characters."
+            />
           </div>
         </Card>
 

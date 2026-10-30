@@ -5,7 +5,7 @@ import type { HomePageContent } from "./types";
 
 export const homePage: HomePageContent = {
   hero: {
-    eyebrow: "University Park · Los Angeles",
+    eyebrow: "Furnished apartments near USC · University Park, Los Angeles",
     headline: "Five minutes from campus.",
     headlineAccent: "Miles from ordinary.",
     subline:
