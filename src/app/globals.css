@@ -67,6 +67,9 @@
   --space-block: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem);
   /* The headline waits for the branded intro on the first page of a session. */
   --intro-delay: 0.1s;
+  /* Space kept clear in the bottom-right corner for the "Powered by Netlify"
+     badge (free plan). Set to 0 if the badge is turned off. */
+  --badge-clearance: 7.5rem;
 }
 html[data-intro="play"] {
   --intro-delay: 1.15s;

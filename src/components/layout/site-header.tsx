@@ -236,9 +236,10 @@ export function SiteHeader({
         </dialog>
       </header>
 
-      {/* Desktop: keep the main action on screen while the header is tucked away. */}
+      {/* Desktop: keep the main action on screen while the header is tucked away.
+          Bottom-left, because the host's badge occupies the bottom-right corner. */}
       <div
-        className={`fixed bottom-6 right-6 z-30 hidden transition-[transform,opacity] duration-(--dur-ui) ease-(--ease-transition) md:block ${
+        className={`fixed bottom-6 left-6 z-30 hidden transition-[transform,opacity] duration-(--dur-ui) ease-(--ease-transition) md:block ${
           showHeader || pathname === "/contact"
             ? "pointer-events-none translate-y-4 opacity-0"
             : "translate-y-0 opacity-100"
