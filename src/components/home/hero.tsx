@@ -22,7 +22,9 @@ export function Hero({ hero, media, site }: { hero: HomePageContent["hero"]; med
   return (
     <section aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
       <div className="lg:container-site lg:grid lg:grid-cols-12 lg:gap-x-10 lg:pb-[var(--space-block)] lg:pt-10">
-        <div className="relative lg:contents">
+        {/* bg-ink sits under the photo (never visible). Checkers such as WAVE can't see the photo or its
+            shading, so without it they compare the light headline with the light page and report a failure. */}
+        <div className="relative bg-ink lg:contents lg:bg-transparent">
           {/* Photo */}
           <div className="relative h-[68svh] max-h-[44rem] min-h-[26rem] overflow-hidden lg:col-span-7 lg:col-start-6 lg:row-start-2 lg:-mr-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] lg:mt-10 lg:h-[min(70vh,44rem)] lg:min-h-[28rem] lg:rounded-l-[2rem] lg:rounded-tl-[7rem]">
             <div data-parallax="6" className="absolute -inset-y-[8%] inset-x-0">
