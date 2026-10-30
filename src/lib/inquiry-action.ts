@@ -1,7 +1,7 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { headers } from "next/headers";
+import { clientIp } from "@/lib/client-ip";
 import { getSiteSettings, getUnits } from "@/lib/data";
 import { sendEmail } from "@/lib/email";
 import { createInquirySchema, type InquiryInput } from "@/lib/inquiry-schema";
@@ -32,8 +32,7 @@ export async function sendInquiry(input: InquiryInput): Promise<InquiryResult> {
   // Automated tests run with INQUIRY_DRY_RUN=1: full validation, nothing saved or sent.
   if (process.env.INQUIRY_DRY_RUN === "1") return { status: "received" };
 
-  const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+  const ip = await clientIp();
   const db = createServiceClient();
 
   const salt = process.env.RATE_LIMIT_SALT ?? "";

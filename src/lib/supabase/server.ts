@@ -5,9 +5,11 @@ import { SCHEMA, supabaseEnv } from "./env";
 
 /** Session-aware client for /admin: acts as the logged-in user, so RLS decides what they can do. */
 export async function createSessionClient() {
+  // Read cookies first: it marks admin pages as per-request, so a build without
+  // Supabase configured skips them instead of failing on the error below.
+  const cookieStore = await cookies();
   const env = supabaseEnv();
   if (!env) throw new Error("Supabase is not configured");
-  const cookieStore = await cookies();
   return createServerClient(env.url, env.anonKey, {
     db: { schema: SCHEMA },
     cookies: {

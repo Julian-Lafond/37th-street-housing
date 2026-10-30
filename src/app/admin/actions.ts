@@ -8,6 +8,7 @@ import sharp from "sharp";
 import type { ActionResult } from "@/components/admin/form-kit";
 import type { HomePageContent, LocationHighlight, OneTimeCharge, RecurringFee, SiteSettings } from "@/content/types";
 import { CONTENT_TAG } from "@/lib/data";
+import { clearFailedLogins, isLockedOut, recordFailedLogin } from "@/lib/login-guard";
 import { BUCKET } from "@/lib/supabase/env";
 import { createSessionClient, getAdmin } from "@/lib/supabase/server";
 
@@ -75,9 +76,17 @@ function parseCharges(value: string): OneTimeCharge[] {
 // ── auth ────────────────────────────────────────────────────────────────────
 
 export async function signIn(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
+  const email = str(fd, "email");
+  // Same message whether or not the account exists, so it reveals nothing.
+  const locked = { ok: false, message: "Too many unsuccessful attempts. Please wait 15 minutes, then try again." };
+  if (await isLockedOut(email)) return locked;
   const supabase = await createSessionClient();
-  const { error } = await supabase.auth.signInWithPassword({ email: str(fd, "email"), password: String(fd.get("password") ?? "") });
-  if (error) return { ok: false, message: "That email and password don’t match. Please try again." };
+  const { error } = await supabase.auth.signInWithPassword({ email, password: String(fd.get("password") ?? "") });
+  if (error) {
+    await recordFailedLogin(email);
+    return { ok: false, message: "That email and password don’t match. Please try again." };
+  }
+  await clearFailedLogins(email);
   const { data: isAdmin } = await supabase.rpc("is_admin");
   if (!isAdmin) {
     await supabase.auth.signOut();

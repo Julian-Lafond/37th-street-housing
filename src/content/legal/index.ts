@@ -5,7 +5,7 @@ export const legalPages: LegalPageMeta[] = [
     slug: "privacy",
     title: "Privacy Policy",
     description: "How 37th Street Housing collects, uses and protects information from website visitors.",
-    updatedAt: "2026-10-26",
+    updatedAt: "2026-10-30",
   },
   {
     slug: "terms",

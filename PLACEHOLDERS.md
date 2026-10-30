@@ -18,7 +18,7 @@ Everything below is unknown today. Unknown values are `null`, empty or `publishe
 | 12 | **Walk / transit times** | `src/content/home.ts` → `neighborhood.highlights` | **No, shown now as estimates** with "Times are approximate". Confirm each in Google Maps from the building's front door, correct the minutes and set `verified: true`. | **Yes** |
 | 13 | Building coordinates | `src/content/site.ts` → `geo` | Yes (omitted from structured data) | No (improves local SEO) |
 | 14 | **Legal entity name, mailing address, contact email/phone in legal pages** | `src/content/legal/*.mdx`: replace `[OWNER NAME / ENTITY]`, `[MAILING ADDRESS]`, `[CONTACT EMAIL]`, `[CONTACT PHONE]` | **No, visible** | **Yes** |
-| 15 | Phase 2 service providers | `src/content/legal/privacy.mdx`: `[HOSTING PROVIDER]`, `[EMAIL PROVIDER]`, `[SPAM-PROTECTION PROVIDER]`, `[DATABASE / STORAGE PROVIDER]` | No, visible | **Yes** |
+| 15 | Phase 2 service providers | `src/content/legal/privacy.mdx`: hosting (Netlify) and data storage (Supabase) are filled in. Still open: `[EMAIL PROVIDER]` (Resend, once set up) and `[SPAM-PROTECTION PROVIDER]` (Cloudflare Turnstile, once set up) | No, visible | **Yes** |
 | 16 | Furnishing wording | `src/content/home.ts` feature "Fully furnished" and FAQ `furnished` say each bedroom has "a bed, desk and chair" (as the photos show). Confirm this is true for every bedroom. | Shown | Confirm |
 | 17 | Which photos show which apartment | `src/content/media.ts` → `assignedTo` (all `"shared"` today) | Not applicable: unassigned photos stay in the shared gallery | No |
 | 18 | Photo rights | The owner confirms they may publish the photos (filenames suggest a listing photographer). See `docs/MEDIA_INVENTORY.md`. | Not applicable | **Yes (confirmation only)** |

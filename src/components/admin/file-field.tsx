@@ -2,7 +2,15 @@
 
 import { useId, useState } from "react";
 
-/** Photo picker with a local preview (nothing is uploaded until the form is submitted). */
+const MAX_BYTES = 10 * 1024 * 1024;
+const TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+
+/**
+ * Photo picker with a local preview (nothing is uploaded until the form is submitted).
+ * Wrong types and files over 10 MB are flagged here so the browser explains the
+ * problem: larger requests are cut off before reaching the server's own checks
+ * (uploadPhoto re-checks type and size and re-encodes every photo regardless).
+ */
 export function FileField({ label, name }: { label: string; name: string }) {
   const id = useId();
   const [preview, setPreview] = useState<string | null>(null);
@@ -19,10 +27,19 @@ export function FileField({ label, name }: { label: string; name: string }) {
         name={name}
         type="file"
         required
-        accept="image/jpeg,image/png,image/webp,image/avif"
+        accept={TYPES.join(",")}
         aria-describedby={`${id}-hint`}
         onChange={(e) => {
           const file = e.target.files?.[0];
+          e.target.setCustomValidity(
+            !file
+              ? ""
+              : !TYPES.includes(file.type)
+                ? "Choose a JPEG, PNG or WebP photo."
+                : file.size > MAX_BYTES
+                  ? "That photo is over 10 MB. Please use a smaller one."
+                  : "",
+          );
           setPreview((old) => {
             if (old) URL.revokeObjectURL(old);
             return file ? URL.createObjectURL(file) : null;
