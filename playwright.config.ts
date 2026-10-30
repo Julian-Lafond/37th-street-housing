@@ -14,6 +14,12 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     contextOptions: { reducedMotion: "reduce" },
+    // Start with the home-page cookie notice dismissed so it never covers what a
+    // test clicks; tests/e2e/cookie-notice.spec.ts clears this to test the notice.
+    storageState: {
+      cookies: [],
+      origins: [{ origin: `http://localhost:${PORT}`, localStorage: [{ name: "cookie-notice-dismissed", value: "1" }] }],
+    },
     trace: "retain-on-failure",
   },
   webServer: {

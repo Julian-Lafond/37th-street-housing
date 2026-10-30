@@ -7,6 +7,7 @@ import { InteriorsShowcase } from "@/components/home/interiors-showcase";
 import { Intro } from "@/components/home/intro";
 import { Neighborhood } from "@/components/home/neighborhood";
 import { ResidencesPreview } from "@/components/home/residences-preview";
+import { CookieNotice } from "@/components/legal/cookie-notice";
 import { Marquee } from "@/components/motion/marquee";
 import { Reveal } from "@/components/motion/reveal";
 import { getFaqs, getHomePage, getMediaByIds, getSiteSettings, getUnitCover, getUnits } from "@/lib/data";
@@ -68,6 +69,7 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={[complexJsonLd, faqJsonLd]} />
+      <CookieNotice />
       <Hero hero={home.hero} media={heroMedia} site={site} />
       <Marquee items={marqueeItems} />
       <Intro intro={home.intro} media={introMedia} />
