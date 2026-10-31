@@ -101,6 +101,8 @@ export async function sendInquiry(input: InquiryInput): Promise<InquiryResult> {
     }),
     sendEmail({
       to: [data.email],
+      // The sending address has no mailbox, so a reply to the confirmation goes to the owner instead.
+      replyTo: notify[0],
       subject: "We received your inquiry | 37th Street Housing",
       text: [
         `Hi ${data.fullName.split(" ")[0]},`,
