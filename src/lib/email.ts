@@ -23,5 +23,11 @@ export async function sendEmail(message: { to: string[]; subject: string; text: 
       headers: { "X-Entity-Ref-ID": crypto.randomUUID() },
     }),
   });
-  return res.ok ? { sent: true as const } : { sent: false as const, reason: `resend-${res.status}` };
+  if (res.ok) return { sent: true as const };
+  // Resend explains rejections (e.g. an invalid address) in a short JSON message.
+  const detail = await res
+    .json()
+    .then((b: { message?: string }) => b.message ?? "")
+    .catch(() => "");
+  return { sent: false as const, reason: `resend-${res.status}${detail ? `: ${detail.slice(0, 200)}` : ""}` };
 }

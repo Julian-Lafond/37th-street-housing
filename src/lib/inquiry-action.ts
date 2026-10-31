@@ -81,7 +81,7 @@ export async function sendInquiry(input: InquiryInput): Promise<InquiryResult> {
     .map((e) => e.trim())
     .concat(site.notificationEmails)
     .filter(Boolean);
-  await Promise.allSettled([
+  const [ownerEmail, visitorEmail] = await Promise.allSettled([
     sendEmail({
       to: notify,
       replyTo: data.email,
@@ -104,6 +104,15 @@ export async function sendInquiry(input: InquiryInput): Promise<InquiryResult> {
       ].join("\n"),
     }),
   ]);
+
+  // Shows up in Netlify → Logs → Functions. Never logs what the visitor wrote.
+  for (const [label, result] of [
+    ["owner notification", ownerEmail],
+    ["visitor confirmation", visitorEmail],
+  ] as const) {
+    const reason = result.status === "rejected" ? String(result.reason) : result.value.sent ? null : result.value.reason;
+    if (reason) console.error(`[inquiry] ${label} not sent (${reason}). Owner addresses configured: ${notify.length}.`);
+  }
 
   return { status: "received" };
 }
