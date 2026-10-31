@@ -30,7 +30,8 @@ export function MobileInquireBar({ leasingText, phone }: { leasingText: string; 
             <span className="sr-only">Call {phone}</span>
           </a>
         )}
-        <p className="line-clamp-2 min-w-0 flex-1 pr-(--badge-clearance) text-sm font-semibold leading-tight text-ink max-[359px]:hidden">
+        {/* Hidden where the badge would leave too little room to read it (see --badge-clearance). */}
+        <p className="line-clamp-2 min-w-0 flex-1 pr-(--badge-clearance) text-sm font-semibold leading-tight text-ink max-[539px]:hidden">
           {leasingText}
         </p>
       </div>

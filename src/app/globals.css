@@ -68,8 +68,9 @@
   /* The headline waits for the branded intro on the first page of a session. */
   --intro-delay: 0.1s;
   /* Space kept clear in the bottom-right corner for the "Powered by Netlify"
-     badge (free plan). Set to 0 if the badge is turned off. */
-  --badge-clearance: 7.5rem;
+     badge (free plan; measured 201×64px on the live site). If the badge is
+     turned off, set this to 0 and the mobile bar's text breakpoint below to 359px. */
+  --badge-clearance: 13rem;
 }
 html[data-intro="play"] {
   --intro-delay: 1.15s;
