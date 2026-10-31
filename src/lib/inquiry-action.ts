@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { clientIp } from "@/lib/client-ip";
 import { getSiteSettings, getUnits } from "@/lib/data";
 import { sendEmail } from "@/lib/email";
+import { ownerInquiryEmail } from "@/lib/inquiry-email";
 import { createInquirySchema, type InquiryInput } from "@/lib/inquiry-schema";
 import type { InquiryResult } from "@/lib/inquiry";
 import { createServiceClient, isServiceConfigured } from "@/lib/supabase/service";
@@ -84,20 +85,7 @@ export async function sendInquiry(input: InquiryInput): Promise<InquiryResult> {
     sendEmail({
       to: notify,
       replyTo: data.email,
-      subject: `New inquiry: ${unitName}`,
-      text: [
-        `Name: ${data.fullName}`,
-        `Email: ${data.email}`,
-        data.phone && `Phone: ${data.phone}`,
-        `Apartment: ${unitName}`,
-        data.moveIn && `Move-in: ${data.moveIn === "august-2027" ? "August 2027" : data.moveInOther}`,
-        data.groupSize && `Group size: ${data.groupSize}`,
-        `Preferred contact: ${data.contactMethod}${data.contactMethod === "text" ? " (agreed to texts)" : ""}`,
-        data.message && `\n${data.message}`,
-        `\nManage inquiries: ${site.url}/admin/inquiries`,
-      ]
-        .filter(Boolean)
-        .join("\n"),
+      ...ownerInquiryEmail({ data, unitName, adminUrl: `${site.url}/admin/inquiries` }),
     }),
     sendEmail({
       to: [data.email],
